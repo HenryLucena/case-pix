@@ -29,10 +29,10 @@ public class ChavePix {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     TipoChave tipoChave;
 
     @Column(unique = true, length = 77, nullable = false)
@@ -61,8 +61,9 @@ public class ChavePix {
     @CreationTimestamp
     private LocalDateTime dataCriação;
 
-    @UpdateTimestamp
-    private LocalDateTime dataAlteracao;
+    private LocalDateTime dataInativacao;
+
+    private boolean isAtiva;
 
     public ChavePix(){}
 
@@ -75,5 +76,6 @@ public class ChavePix {
         this.nomeCorrentista = request.getNomeCorrentista();
         this.sobrenomeCorrentista = request.getSobrenomeCorrentista();
         this.tipoPessoa = request.getTipoPessoa();
+        this.isAtiva = true;
     }
 }

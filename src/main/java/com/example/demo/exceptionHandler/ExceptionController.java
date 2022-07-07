@@ -25,6 +25,12 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(error.getStatus()).body(error);
     }
 
+    @ExceptionHandler(value = ChavePixNotFoundException.class)
+    public ResponseEntity<StandardObjectException> handleNotFoundException(ChavePixNotFoundException e, HttpServletRequest request){
+        StandardObjectException errror = new StandardObjectException(HttpStatus.NOT_FOUND.value(), e.getMessage(), request.getRequestURI(), new Date().getTime());
+        return ResponseEntity.status(errror.getStatus()).body(errror);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e,
