@@ -9,6 +9,7 @@ import com.example.demo.model.TipoPessoa;
 import com.example.demo.repository.ChavePixRepository;
 import com.example.demo.request.CreateChavePixRequest;
 import com.example.demo.request.UpdateChavePixRequest;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -18,13 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -171,7 +171,7 @@ public class ChavePixServiceTest {
 
     @Test
     @DisplayName("deve lançar exception se o código verificador do CPF não for válido")
-    public void deveLancarExceptionCpfComVerificadorInválido(){
+    public void deveLancarExceptionCpfComVerificadorInvalido(){
         CreateChavePixRequest mockRequest = new CreateChavePixRequest();
         mockRequest.setTipoChave(TipoChave.CPF);
         mockRequest.setValorChave("64319882051");
@@ -382,6 +382,103 @@ public class ChavePixServiceTest {
 
         chavePixService.inativarChave(UUID.randomUUID());
 
-        assertEquals(false, optionalChavePix.isAtiva());
+        assertFalse(optionalChavePix.isAtiva());
     }
+
+    @Test
+    @DisplayName("Deve retornar chave por ID")
+    public void deveRetornarChaveId(){
+        ChavePix optionalChavePix = new ChavePix();
+        optionalChavePix.setId(UUID.randomUUID());
+
+        when(chavePixRepository.findById(optionalChavePix.getId())).thenReturn(Optional.of(optionalChavePix));
+
+        assertNotNull(chavePixService.getById(optionalChavePix.getId()));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception chave não encontrada por id")
+    public void deveLancarExceptionChaveNaoEncontraId(){
+        assertThatThrownBy(() -> chavePixService.getById(UUID.randomUUID()))
+                .isInstanceOf(ChavePixNotFoundException.class)
+                .hasMessage("Chave informada não encontrada");
+    }
+
+    @Test
+    @DisplayName("Deve retornar chave por tipo chave")
+    public void deveRetornarChavePorTipoChave(){
+        ArrayList<ChavePix> list = new ArrayList<>();
+        list.add(new ChavePix());
+        String tipoChave = "CPF";
+
+        when(chavePixRepository.findByTipoChave(tipoChave)).thenReturn(list);
+
+        assertNotNull(chavePixService.getByTipoChave(tipoChave));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception quando chave não for encontrada por tipo chave")
+    public void deveLancarExceptionChaveNaoEncontradaTipoChave(){
+        assertThatThrownBy(() -> chavePixService.getByTipoChave(anyString()))
+                .isInstanceOf(ChavePixNotFoundException.class)
+                .hasMessage("Chave informada não encontrada");
+    }
+
+    @Test
+    @DisplayName("Deve retornar chave por tipo chave")
+    public void deveRetornarChavePorAgenciaConta(){
+        ArrayList<ChavePix> list = new ArrayList<>();
+        list.add(new ChavePix());
+
+        when(chavePixRepository.findByAgenciaConta(anyInt(), anyInt())).thenReturn(list);
+
+        assertNotNull(chavePixService.getByAgenciaConta(anyInt(), anyInt()));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception quando chave não for encontrada por agencia e conta")
+    public void deveLancarExceptionChaveNaoEncontradaAgenciaConta(){
+        assertThatThrownBy(() -> chavePixService.getByAgenciaConta(anyInt(), anyInt()))
+                .isInstanceOf(ChavePixNotFoundException.class)
+                .hasMessage("Chave informada não encontrada");
+    }
+
+    @Test
+    @DisplayName("Deve retornar chave por nome correntista e numero conta")
+    public void deveRetornarChavePorNomeConta(){
+        ArrayList<ChavePix> list = new ArrayList<>();
+        list.add(new ChavePix());
+
+        when(chavePixRepository.findByNomeConta(anyString(), anyInt())).thenReturn(list);
+
+        assertNotNull(chavePixService.getByNomeConta(anyString(), anyInt()));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception quando chave não for encontrada por nome correntista e numero conta")
+    public void deveLancarExceptionChaveNaoEncontradaNomeConta(){
+        assertThatThrownBy(() -> chavePixService.getByNomeConta(anyString(), anyInt()))
+                .isInstanceOf(ChavePixNotFoundException.class)
+                .hasMessage("Chave informada não encontrada");
+    }
+
+    @Test
+    @DisplayName("Deve retornar chave por nome correntista e tipo chave")
+    public void deveRetornarChavePorNomeTipoChave(){
+        ArrayList<ChavePix> list = new ArrayList<>();
+        list.add(new ChavePix());
+
+        when(chavePixRepository.findByNomeTipoChave(anyString(), anyString())).thenReturn(list);
+
+        assertNotNull(chavePixService.getByNomeTipoChave(anyString(), anyString()));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception quando chave não for encontrada por nome correntista e tipo conta")
+    public void deveLancarExceptionChaveNaoEncontradaNomeTipoChave(){
+        assertThatThrownBy(() -> chavePixService.getByNomeTipoChave(anyString(), anyString()))
+                .isInstanceOf(ChavePixNotFoundException.class)
+                .hasMessage("Chave informada não encontrada");
+    }
+
 }

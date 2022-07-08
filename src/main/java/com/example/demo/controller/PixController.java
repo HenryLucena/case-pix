@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 import static java.lang.String.valueOf;
@@ -56,25 +57,25 @@ public class PixController {
 
     @GetMapping("/getByTipoChave")
     public ResponseEntity<?> getByTipoChave(@RequestParam String tipoChave){
-        ChavePix chavePix = chavePixService.getByTipoChave(tipoChave);
+        List<ChavePix> chavePix = chavePixService.getByTipoChave(tipoChave);
         return new ResponseEntity<>(chavePix, HttpStatus.OK);
     }
 
     @GetMapping("/getByAgenciaConta")
     public ResponseEntity<?> getByAgenciaConta(@RequestParam int agencia, @RequestParam int conta){
-        ChavePix chavePix = chavePixService.getByAgenciaConta(agencia, conta);
+        List<ChavePix> chavePix = chavePixService.getByAgenciaConta(agencia, conta);
         return new ResponseEntity<>(chavePix, HttpStatus.OK);
     }
 
     @GetMapping("/getByNomeConta")
     public ResponseEntity<?> getByNomeConta(@RequestParam String nome, @RequestParam int conta){
-        ChavePix chavePix = chavePixService.getByNomeConta(nome, conta);
+        List<ChavePix> chavePix = chavePixService.getByNomeConta(nome, conta);
         return new ResponseEntity<>(chavePix, HttpStatus.OK);
     }
 
     @GetMapping("/getByNomeTipoChave")
     public ResponseEntity<?> getByNomeTipoChave(@RequestParam String nome, @RequestParam String tipoChave){
-        ChavePix chavePix = chavePixService.getByNomeTipoChave(nome, tipoChave);
+        List<ChavePix> chavePix = chavePixService.getByNomeTipoChave(nome, tipoChave);
         return new ResponseEntity<>(chavePix, HttpStatus.OK);
     }
 }

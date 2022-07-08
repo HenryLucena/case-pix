@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -118,9 +119,9 @@ public class ChavePixService {
         }
     }
 
-    public ChavePix getByTipoChave(String tipoChave){
+    public List<ChavePix> getByTipoChave(String tipoChave){
         try {
-            ChavePix chavePix = chavePixRepository.findByTipoChave(tipoChave);
+            List<ChavePix> chavePix = chavePixRepository.findByTipoChave(tipoChave);
             if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             return chavePix;
@@ -129,9 +130,9 @@ public class ChavePixService {
         }
     }
 
-    public ChavePix getByAgenciaConta(int agencia, int conta){
+    public List<ChavePix> getByAgenciaConta(int agencia, int conta){
         try {
-            ChavePix chavePix = chavePixRepository.findByAgenciaConta(agencia, conta);
+            List<ChavePix> chavePix = chavePixRepository.findByAgenciaConta(agencia, conta);
             if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             return chavePix;
@@ -140,9 +141,9 @@ public class ChavePixService {
         }
     }
 
-    public ChavePix getByNomeConta(String nome, int conta){
+    public List<ChavePix> getByNomeConta(String nome, int conta){
         try {
-            ChavePix chavePix = chavePixRepository.findByNomeConta(nome, conta);
+            List<ChavePix> chavePix = chavePixRepository.findByNomeConta(nome, conta);
             if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             return chavePix;
@@ -151,9 +152,9 @@ public class ChavePixService {
         }
     }
 
-    public ChavePix getByNomeTipoChave(String nome, String tipoChave){
+    public List<ChavePix> getByNomeTipoChave(String nome, String tipoChave){
         try {
-            ChavePix chavePix = chavePixRepository.findByNomeTipoChave(nome, tipoChave);
+            List<ChavePix> chavePix = chavePixRepository.findByNomeTipoChave(nome, tipoChave);
             if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             return chavePix;

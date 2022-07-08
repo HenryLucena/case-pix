@@ -19,7 +19,7 @@ public interface ChavePixRepository extends JpaRepository<ChavePix, UUID> {
     @Query(
             value = "SELECT * FROM chave_pix cp WHERE cp.tipo_chave = ?1",
             nativeQuery = true)
-    ChavePix findByTipoChave(String tipoChave);
+    ArrayList<ChavePix> findByTipoChave(String tipoChave);
 
     @Query(
             value = "SELECT * FROM chave_pix cp WHERE cp.numero_conta = ?1",
@@ -29,16 +29,16 @@ public interface ChavePixRepository extends JpaRepository<ChavePix, UUID> {
     @Query(
             value = "SELECT * FROM chave_pix cp WHERE cp.numero_agencia = ?1 AND cp.numero_conta = ?2",
             nativeQuery = true)
-    ChavePix findByAgenciaConta(int agencia, int conta);
+    ArrayList<ChavePix> findByAgenciaConta(int agencia, int conta);
 
     @Query(
             value = "SELECT * FROM chave_pix cp WHERE cp.nome_correntista = ?1 AND cp.numero_conta = ?2",
             nativeQuery = true)
-    ChavePix findByNomeConta(String nome, int conta);
+    ArrayList<ChavePix> findByNomeConta(String nome, int conta);
 
     @Query(
             value = "SELECT * FROM chave_pix cp WHERE cp.nome_correntista = ?1 AND cp.tipo_chave = ?2",
             nativeQuery = true)
-    ChavePix findByNomeTipoChave(String nome, String tipoChave);
+    ArrayList<ChavePix> findByNomeTipoChave(String nome, String tipoChave);
 
 }
