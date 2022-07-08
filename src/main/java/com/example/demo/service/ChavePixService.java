@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.example.demo.service.validaChave.*;
+import static com.example.demo.service.ValidaChave.*;
 import static java.util.Objects.nonNull;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -162,7 +162,7 @@ public class ChavePixService {
         }
     }
 
-    private boolean isChaveValida(String valorChave, TipoChave tipoChave){
+    protected boolean isChaveValida(String valorChave, TipoChave tipoChave){
         if (tipoChave.equals(TipoChave.CPF)){ return isValidCPF(valorChave); }
 
         if(tipoChave.equals(TipoChave.CNPJ)) {return isValidCNPJ(valorChave);}
