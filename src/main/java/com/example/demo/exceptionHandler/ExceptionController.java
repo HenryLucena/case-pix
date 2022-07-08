@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestControllerAdvice
-public class ExceptionController extends ResponseEntityExceptionHandler {
+public class ExceptionController extends ResponseEntityExceptionHandler{
 
     @ExceptionHandler(value = InternalServerErrorException.class)
     public ResponseEntity<StandardObjectException> handleInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request){

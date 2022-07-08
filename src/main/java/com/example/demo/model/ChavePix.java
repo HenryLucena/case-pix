@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,12 +35,14 @@ public class ChavePix {
     private UUID id;
 
     @Column(nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
     TipoChave tipoChave;
 
     @Column(unique = true, length = 77, nullable = false)
     String valorChave;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     TipoConta tipoConta;
 
     @Column(nullable = false)
@@ -56,6 +60,7 @@ public class ChavePix {
     String sobrenomeCorrentista;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     TipoPessoa tipoPessoa;
 
     @CreationTimestamp

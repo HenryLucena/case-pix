@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.example.demo.service.validaChave.*;
-import static java.util.Objects.isNull;
+import static java.lang.String.valueOf;
 import static java.util.Objects.nonNull;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -43,7 +43,12 @@ public class ChavePixService {
 
             if (request.getTipoPessoa().equals(TipoPessoa.F)){
                 ArrayList<ChavePix> chavesPix = chavePixRepository.findAllByConta(request.getNumeroConta());
-                if (chavesPix.size() > 5) throw new ChavePixException("Número máximo de chaves atingido");
+                if (chavesPix.size() >= 5) throw new ChavePixException("Número máximo de chaves atingido");
+            }
+
+            if(request.getTipoPessoa().equals(TipoPessoa.J)){
+                ArrayList<ChavePix> chavesPix = chavePixRepository.findAllByConta(request.getNumeroConta());
+                if (chavesPix.size() >= 20) throw new ChavePixException("Número máximo de chaves atingido");
             }
 
             ChavePix chavePix = new ChavePix(request);
@@ -60,7 +65,7 @@ public class ChavePixService {
         try {
             Optional<ChavePix> optionalChavePix = chavePixRepository.findById(request.getId());
 
-            if(isNull(optionalChavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+            if(isEmpty(optionalChavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             ChavePix chavePix = optionalChavePix.get();
 
@@ -87,6 +92,9 @@ public class ChavePixService {
             if(isEmpty(optionalChavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
 
             ChavePix chavePix = optionalChavePix.get();
+
+            if (!chavePix.isAtiva()) {throw new ChavePixException("Esta chave já está desativada");}
+
             chavePix.setAtiva(false);
             chavePix.setDataInativacao(LocalDateTime.now());
             chavePixRepository.save(chavePix);
@@ -99,6 +107,60 @@ public class ChavePixService {
         }
     }
 
+    public ChavePix getById(UUID id){
+        try {
+            Optional<ChavePix> optionalChavePix = chavePixRepository.findById(id);
+            if(isEmpty(optionalChavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+
+            return optionalChavePix.get();
+        } catch (ChavePixNotFoundException e){
+            throw new ChavePixNotFoundException(e.getMessage(), e);
+        }
+    }
+
+    public ChavePix getByTipoChave(String tipoChave){
+        try {
+            ChavePix chavePix = chavePixRepository.findByTipoChave(tipoChave);
+            if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+
+            return chavePix;
+        } catch (ChavePixNotFoundException e){
+            throw new ChavePixNotFoundException(e.getMessage(), e);
+        }
+    }
+
+    public ChavePix getByAgenciaConta(int agencia, int conta){
+        try {
+            ChavePix chavePix = chavePixRepository.findByAgenciaConta(agencia, conta);
+            if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+
+            return chavePix;
+        } catch (ChavePixNotFoundException e){
+            throw new ChavePixNotFoundException(e.getMessage(), e);
+        }
+    }
+
+    public ChavePix getByNomeConta(String nome, int conta){
+        try {
+            ChavePix chavePix = chavePixRepository.findByNomeConta(nome, conta);
+            if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+
+            return chavePix;
+        } catch (ChavePixNotFoundException e){
+            throw new ChavePixNotFoundException(e.getMessage(), e);
+        }
+    }
+
+    public ChavePix getByNomeTipoChave(String nome, String tipoChave){
+        try {
+            ChavePix chavePix = chavePixRepository.findByNomeTipoChave(nome, tipoChave);
+            if(isEmpty(chavePix)) throw new ChavePixNotFoundException("Chave informada não encontrada");
+
+            return chavePix;
+        } catch (ChavePixNotFoundException e){
+            throw new ChavePixNotFoundException(e.getMessage(), e);
+        }
+    }
 
     private boolean isChaveValida(String valorChave, TipoChave tipoChave){
         if (tipoChave.equals(TipoChave.CPF)){ return isValidCPF(valorChave); }
