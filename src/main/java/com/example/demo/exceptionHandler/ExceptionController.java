@@ -48,8 +48,4 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
         ApiError apiError = new ApiError(HttpStatus.UNPROCESSABLE_ENTITY, e.getLocalizedMessage(), errors);
         return handleExceptionInternal(e, apiError, headers, apiError.getStatus(), request);
     }
-
-    //todo exception para JSON parse
-
-    //TODO exception para contraint violation
 }
