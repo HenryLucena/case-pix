@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.example.demo.service.validaChave.*;
-import static java.lang.String.valueOf;
 import static java.util.Objects.nonNull;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
