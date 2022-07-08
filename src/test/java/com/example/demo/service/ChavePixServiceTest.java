@@ -326,12 +326,33 @@ public class ChavePixServiceTest {
     public void deveLancarExceptionUpdateChaveInativa(){
         UpdateChavePixRequest mockRequest = new UpdateChavePixRequest();
         mockRequest.setId(UUID.randomUUID());
+        mockRequest.setTipoChave(TipoChave.CPF);
 
-        when(chavePixRepository.findById(mockRequest.getId())).thenReturn(Optional.of(new ChavePix()));
+        ChavePix chavePix = new ChavePix();
+        chavePix.setTipoChave(TipoChave.CPF);
+
+        when(chavePixRepository.findById(mockRequest.getId())).thenReturn(Optional.of(chavePix));
 
         assertThatThrownBy(() -> chavePixService.atualizarChavePix(mockRequest))
                 .isInstanceOf(InternalServerErrorException.class)
                 .hasMessage("Não foi possível atualizar. Chave Inativa!");
+    }
+
+    @Test
+    @DisplayName("Deve lançar exception se Tipo chave do request for diferente do tipo chave original")
+    public void deveLancarExceptionTipoChaveDiferente(){
+        UpdateChavePixRequest mockRequest = new UpdateChavePixRequest();
+        mockRequest.setId(UUID.randomUUID());
+        mockRequest.setTipoChave(TipoChave.CPF);
+
+        ChavePix chavePix = new ChavePix();
+        chavePix.setTipoChave(TipoChave.CELULAR);
+
+        when(chavePixRepository.findById(mockRequest.getId())).thenReturn(Optional.of(chavePix));
+
+        assertThatThrownBy(() -> chavePixService.atualizarChavePix(mockRequest))
+                .isInstanceOf(InternalServerErrorException.class)
+                .hasMessage("Valor da chave não pode ser alterado");
     }
 
     @Test
@@ -344,6 +365,7 @@ public class ChavePixServiceTest {
 
         ChavePix optionalChavePix = new ChavePix();
         optionalChavePix.setAtiva(true);
+        optionalChavePix.setTipoChave(TipoChave.EMAIL);
 
         when(chavePixRepository.findById(mockRequest.getId())).thenReturn(Optional.of(optionalChavePix));
 

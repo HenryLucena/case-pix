@@ -9,12 +9,17 @@ import com.example.demo.model.TipoPessoa;
 import com.example.demo.repository.ChavePixRepository;
 import com.example.demo.request.CreateChavePixRequest;
 import com.example.demo.request.UpdateChavePixRequest;
+import com.example.demo.response.AtualizaChavePixResponse;
+import com.example.demo.response.InativacaoChavePixResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,6 +74,8 @@ public class ChavePixService {
 
             ChavePix chavePix = optionalChavePix.get();
 
+            if(!request.getTipoChave().equals(chavePix.getTipoChave())) throw new ChavePixException("Valor da chave não pode ser alterado");
+
             if(!chavePix.isAtiva()) throw new ChavePixException("Não foi possível atualizar. Chave Inativa!");
 
             if(!isChaveValida(request.getValorChave(), request.getTipoChave())) {
@@ -76,6 +83,7 @@ public class ChavePixService {
             }
 
             chavePix.setValorChave(request.getValorChave());
+            chavePix.setDataCriacao(LocalDateTime.now());
             chavePixRepository.save(chavePix);
 
             return chavePix;
